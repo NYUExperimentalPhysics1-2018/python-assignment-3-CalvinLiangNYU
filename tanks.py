@@ -44,7 +44,8 @@ def trajectory (x0,y0,v,theta,g = 9.8, npts = 1000):
     0.5g t^2 - vsin(theta) t - y0 = 0
     t_final = v/g sin(theta) + sqrt((v/g)^2 sin^2(theta) + 2 y0/g)
     """
-  
+    t_final = 0
+    t = np.linspace(0, t_final, npts)
 
 def firstInBox (x,y,box):
     """
@@ -84,7 +85,7 @@ def tankShot (targetBox, obstacleBox, x0, y0, v, theta, g = 9.8):
     v : float
         velocity of the shot
     theta : float
-        angle of the shot
+        angle of the shot (in degrees)
     g : float 
         accel due to gravity (default 9.8)
     returns
@@ -96,7 +97,7 @@ def tankShot (targetBox, obstacleBox, x0, y0, v, theta, g = 9.8):
     obstacle box
     draws the truncated trajectory in current plot window
     """
-    
+    trajectory(x0, y0, v, theta)
 
 
 def drawBoard (tank1box, tank2box, obstacleBox, playerNum):
@@ -112,10 +113,14 @@ def drawBoard (tank1box, tank2box, obstacleBox, playerNum):
         (left,right,bottom,top) location of the central obstacle
     playerNum : int
         1 or 2 -- who's turn it is to shoot
- 
+    
     """    
     #your code here
-    
+    plt.figure("Artillery")
+    plt.title("Player" + playerNum + "turn")
+    drawBox(tank1box, tank1Color)
+    drawBox(tank2box, tank2Color)
+    drawBox(obstacleBox, obstacleColor)
     showWindow() #this makes the figure window show up
 
 def oneTurn (tank1box, tank2box, obstacleBox, playerNum, g = 9.8):   
@@ -125,7 +130,7 @@ def oneTurn (tank1box, tank2box, obstacleBox, playerNum, g = 9.8):
     tank1box : tuple
         (left,right,bottom,top) location of player1's tank
     tank2box : tuple
-        (left,right,bottom,top) location of player1's tank
+        (left,right,bottom,top) location of player2's tank
     obstacleBox : tuple
         (left,right,bottom,top) location of the central obstacle
     playerNum : int
@@ -142,9 +147,21 @@ def oneTurn (tank1box, tank2box, obstacleBox, playerNum, g = 9.8):
     prompts player for velocity and angle
     displays trajectory (shot originates from center of tank)
     returns 0 for miss, 1 or 2 for victory
-    """        
-
-    
+    """
+    plt.clf()
+    drawBoard(tank1box, tank2box, obstacleBox, 1, None)
+    velocity = getNumberInput("Player " + playerNum + " enter velocity > ")
+    angle = getNumberInput("Player " + playerNum + " enter angle (deg) > ")
+    if playerNum == 1:
+        origin = tank1box
+        target = tank2box
+    else:
+        origin = tank2box
+        target = tank1box
+    x0 = .5 * (origin[0] + origin[1])
+    y0 = .5 * (origin[2] + origin[3])
+    code = tankShot(target, obstacleBox, x0, y0, velocity, angle)
+    return code
 
 def playGame(tank1box, tank2box, obstacleBox, g = 9.8):
     """
@@ -153,7 +170,7 @@ def playGame(tank1box, tank2box, obstacleBox, g = 9.8):
     tank1box : tuple
         (left,right,bottom,top) location of player1's tank
     tank2box : tuple
-        (left,right,bottom,top) location of player1's tank
+        (left,right,bottom,top) location of player2's tank
     obstacleBox : tuple
         (left,right,bottom,top) location of the central obstacle
     playerNum : int
@@ -161,8 +178,18 @@ def playGame(tank1box, tank2box, obstacleBox, g = 9.8):
      g : float 
         accel due to gravity (default 9.8)
     """
-    
-    
+    playerNum = 1
+    code = 0
+    while code == 0:
+        code = oneTurn(tank1box, tank2box, obstacleBox, playerNum, g)
+        if playerNum == 1:
+            playerNum = 2
+            continue
+        else:
+            playerNum = 1
+            continue
+    else:
+        print("Congratulations player", code, "!")
         
 ##### functions provided to you #####
 def getNumberInput (prompt, validRange = [-np.Inf, np.Inf]):
