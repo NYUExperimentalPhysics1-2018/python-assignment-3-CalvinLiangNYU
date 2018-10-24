@@ -7,6 +7,7 @@ Created on Thu Oct 18 19:18:02 2018
 """
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 
 tank1Color = 'b'
 tank2Color = 'r'
@@ -44,8 +45,15 @@ def trajectory (x0,y0,v,theta,g = 9.8, npts = 1000):
     0.5g t^2 - vsin(theta) t - y0 = 0
     t_final = v/g sin(theta) + sqrt((v/g)^2 sin^2(theta) + 2 y0/g)
     """
-    t_final = 0
+    theta = np.full((npts,), theta)
+    theta = np.deg2rad(theta)
+    vx = v * np.cos(theta)
+    vy = v * np.sin(theta)
+    t_final = vy[1].item() / g + math.sqrt((vy[0].item() / g)**2 - 2 * y0 / g)
     t = np.linspace(0, t_final, npts)
+    x = x0 + vx * t
+    y = x0 + vy * t + .5 * g * t**2
+    return (x, y)
 
 def firstInBox (x,y,box):
     """
@@ -149,9 +157,9 @@ def oneTurn (tank1box, tank2box, obstacleBox, playerNum, g = 9.8):
     returns 0 for miss, 1 or 2 for victory
     """
     plt.clf()
-    drawBoard(tank1box, tank2box, obstacleBox, 1, None)
-    velocity = getNumberInput("Player " + playerNum + " enter velocity > ")
-    angle = getNumberInput("Player " + playerNum + " enter angle (deg) > ")
+    drawBoard(tank1box, tank2box, obstacleBox, 1)
+    velocity = getNumberInput("Player " + str(playerNum) + " enter velocity > ")
+    angle = getNumberInput("Player " + str(playerNum) + " enter angle (deg) > ")
     if playerNum == 1:
         origin = tank1box
         target = tank2box
