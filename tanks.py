@@ -206,6 +206,7 @@ def playGame(tank1box, tank2box, obstacleBox, g = 9.8):
      g : float 
         accel due to gravity (default 9.8)
     """
+    plt.ion()
     playerNum = 1
     code = 0
     while code == 0:
