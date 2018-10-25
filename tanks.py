@@ -52,7 +52,7 @@ def trajectory (x0,y0,v,theta,g = 9.8, npts = 1000):
     t_final = vy[0].item() / g + math.sqrt((vy[0].item() / g)**2 - 2 * y0 / g)
     t = np.linspace(0, t_final, npts)
     x = x0 + vx * t
-    y = x0 + vy * t + .5 * g * t**2
+    y = y0 + vy * t + .5 * g * t**2
     return (x, y)
 
 def firstInBox (x,y,box):
