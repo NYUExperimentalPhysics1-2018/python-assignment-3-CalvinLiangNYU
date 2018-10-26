@@ -45,14 +45,13 @@ def trajectory (x0,y0,v,theta,g = 9.8, npts = 1000):
     0.5g t^2 - vsin(theta) t - y0 = 0
     t_final = v/g sin(theta) + sqrt((v/g)^2 sin^2(theta) + 2 y0/g)
     """
-    theta = np.full((npts,), theta)
-    theta = np.deg2rad(theta)
-    vx = v * np.cos(theta)
-    vy = v * np.sin(theta)
-    t_final = vy[0].item() / g + math.sqrt((vy[0].item() / g)**2 - 2 * y0 / g)
+    theta = math.radians(theta)
+    vx = v * math.cos(theta)
+    vy = v * math.sin(theta)
+    t_final = (vy + math.sqrt(vy**2 + 2 * g * y0)) / g
     t = np.linspace(0, t_final, npts)
     x = x0 + vx * t
-    y = x0 + vy * t + .5 * g * t**2
+    y = y0 + vy * t - .5 * g * t**2
     return (x, y)
 
 def firstInBox (x,y,box):
@@ -206,6 +205,7 @@ def playGame(tank1box, tank2box, obstacleBox, g = 9.8):
      g : float 
         accel due to gravity (default 9.8)
     """
+    plt.ion()
     playerNum = 1
     code = 0
     while code == 0:
