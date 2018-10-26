@@ -73,12 +73,11 @@ def firstInBox (x,y,box):
         y[j] is in [bottom,top]
         -1 if the line x,y does not go through the box
     """
-    it = np.nditer([x, y])
+    it = np.nditer([x, y], flags=['c_index'])
     while not it.finished:
         if box[0] <= it[0] <= box[1] and box[2] <= it[1] <= box[3]:
-            return it.index[0]
-        else:
-            it.iternext()
+            return it.index
+        it.iternext()
     else:
         return -1
 
@@ -214,7 +213,7 @@ def playGame(tank1box, tank2box, obstacleBox, g = 9.8):
             playerNum = 1
         while True:
             continueGame = 0
-            continueGame = input("hit enter to continue > ")
+            continueGame = input("hit enter to continue >")
             if continueGame != 0:
                 break
         continue
