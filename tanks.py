@@ -14,7 +14,7 @@ tank2Color = 'r'
 obstacleColor = 'k'
 
 ##### functions you need to implement #####
-def trajectory (x0,y0,v,theta,g = 9.8, npts = 1000):
+def trajectory (x0,y0,v,theta,g = 9.8, npts = 10000):
     """
     finds the x-y trajectory of a projectile
     
@@ -211,15 +211,12 @@ def playGame(tank1box, tank2box, obstacleBox, g = 9.8):
             playerNum = 2
         else:
             playerNum = 1
-        while True:
-            continueGame = 0
-            continueGame = input("hit enter to continue >")
-            if continueGame != 0:
-                break
-        continue
+        if code == 0:
+            input("<hit enter to continue>")
     else:
-        print("Congratulations player", code, "!")
-        
+        print("Congratulations player ", code, "!", sep='')
+        input("<hit enter to exit>")
+
 ##### functions provided to you #####
 def getNumberInput (prompt, validRange = [-np.Inf, np.Inf]):
     """displays prompt and converts user input to a number
