@@ -113,7 +113,6 @@ def tankShot (targetBox, obstacleBox, x0, y0, v, theta, g = 9.8):
     obstacleHit = firstInBox(x, y, obstacleBox)
     if obstacleHit != -1:
         x, y = endTrajectoryAtIntersection(x, y, obstacleBox)
-    plt.figure("Artillery")
     plt.plot(x, y, 'k')
     showWindow()
     targetHit = firstInBox(x, y, targetBox)
@@ -138,7 +137,6 @@ def drawBoard (tank1box, tank2box, obstacleBox, playerNum):
     
     """    
     #your code here
-    plt.figure("Artillery")
     plt.clf()
     plt.title("Player" + str(playerNum) + "turn")
     drawBox(tank1box, tank1Color)
